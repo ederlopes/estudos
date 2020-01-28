@@ -11,8 +11,7 @@
 |
 */
 
-use \App\Post;
-use App\PostImage;
+use \App\{Post, PostImage};
 
 Route::get('/', function () {
     $name = 'Anderson';
@@ -22,11 +21,30 @@ Route::get('/', function () {
 
 Route::get('sub', function () {
     $posts = Post::addSelect([
-        'image' => PostImage::select('image')->whereColumn('post_id', 'posts')->limit(1)
+        'thumb' => PostImage::select('image')
+                            ->whereColumn('post_id', 'posts.id')
+                            ->limit(1)
     ])->get();
-
     return $posts;
 });
+
+
+Route::get('collection', function () {
+    $posts = Post::all();
+
+    foreach ($posts as $post){
+        print $post->title.' - '. $post->description.'<br/>';
+    }
+});
+
+Route::get('lazy-collection', function () {
+    $posts = Post::cursor();
+
+    foreach ($posts as $post){
+        print $post->title.' - '. $post->description.'<br/>';
+    }
+});
+
 
 Auth::routes();
 
