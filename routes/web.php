@@ -11,23 +11,10 @@
 |
 */
 
-use \App\Post;
-use App\PostImage;
+use \App\{Post, PostImage};
 
-Route::get('/', function () {
-    $name = 'Anderson';
-    return view('welcome', ['name' => $name]);
-});
+Route::get('/', 'HomeController@index')->name('index');
+Route::get('/renameArchivePdf', 'HomeController@renameArchivePdf')->name('renameArchivePdf');
+Route::get('/countPage', 'HomeController@countPage')->name('countPage');
+Route::get('/downloadPDF/{cpf}', 'HomeController@downloadPDF')->name('downloadPDF');
 
-
-Route::get('sub', function () {
-    $posts = Post::addSelect([
-        'image' => PostImage::select('image')->whereColumn('post_id', 'posts')->limit(1)
-    ])->get();
-
-    return $posts;
-});
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
